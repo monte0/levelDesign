@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class CameraMove : MonoBehaviour
+public class CameraController: MonoBehaviour
 {
     private const float Y_ANGLE_MIN = 0.0f;
     private const float Y_ANGLE_MAX = 50.0f;
