@@ -6,6 +6,7 @@ public class CameraController: MonoBehaviour
     private const float Y_ANGLE_MAX = 50.0f;
     public Transform lookAt;
     public Transform camTransform;
+    public Transform Pivot;
 
     private Camera cam;
 
@@ -15,10 +16,12 @@ public class CameraController: MonoBehaviour
     private float sensitivityX = 4.0f;
     private float sensitivityY = 1.0f;
 
-    private void start()
+    void start()
     {
         camTransform = transform;
         cam = Camera.main;
+        Pivot.transform.position = lookAt.transform.position;
+        Pivot.transform.parent = lookAt.transform; 
     }
 
     private void Update()

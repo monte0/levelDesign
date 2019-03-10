@@ -11,6 +11,7 @@ public class Controller : MonoBehaviour
     public Transform feet;
     //public AudioSource audio;
 
+    private Vector3 moveDirection;
     private Vector3 direction;
     private Vector3 walkingVelocity;
     private Vector3 fallingVelocity;
@@ -34,12 +35,18 @@ public class Controller : MonoBehaviour
         direction.x = Input.GetAxis("Horizontal");
         direction.z = Input.GetAxis("Vertical");
         direction = direction.normalized;
-        walkingVelocity = direction * speed;
+        Vector3 targetDirection = new Vector3(direction.x, 0f, direction.z);
+        targetDirection = Camera.main.transform.TransformDirection(targetDirection);
+        targetDirection.y = 0.0f;
+        //  moveDirection = (transform.forward * Input.GetAxis("Vertical"));
+        //  walkingVelocity = direction * speed;
+        walkingVelocity = targetDirection * speed;
         controller.Move(walkingVelocity * Time.deltaTime);
+       
 
         if (direction != Vector3.zero)
         {
-            transform.forward = direction;
+            transform.forward = targetDirection;
             Debug.Log(direction);
         }
 
