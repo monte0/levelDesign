@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controller : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float gravity;
@@ -42,7 +42,7 @@ public class Controller : MonoBehaviour
         //  walkingVelocity = direction * speed;
         walkingVelocity = targetDirection * speed;
         controller.Move(walkingVelocity * Time.deltaTime);
-       
+
 
         if (direction != Vector3.zero)
         {
