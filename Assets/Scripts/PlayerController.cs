@@ -1,67 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed;
+    public float jumpSpeed;
     public float gravity;
-    public float jumpHeight;
-    public LayerMask ground;
-    public Transform feet;
-    //public AudioSource audio;
 
-    private Vector3 moveDirection;
-    private Vector3 direction;
-    private Vector3 walkingVelocity;
-    private Vector3 fallingVelocity;
-    private CharacterController controller;
+    public CharacterController charController;
 
-    // Use this for initialization
+    private Vector3 movement = Vector3.zero;
+
     void Start()
     {
-        speed = 5.0f;
-        gravity = 9.8f;
-        jumpHeight = 3.0f;
-        direction = Vector3.zero;
-        fallingVelocity = Vector3.zero;
-        controller = GetComponent<CharacterController>();
-        //audio = GetComponent<AudioSource>();
+        charController = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        direction.x = Input.GetAxis("Horizontal");
-        direction.z = Input.GetAxis("Vertical");
-        direction = direction.normalized;
-        Vector3 targetDirection = new Vector3(direction.x, 0f, direction.z);
-        targetDirection = Camera.main.transform.TransformDirection(targetDirection);
-        targetDirection.y = 0.0f;
-        //  moveDirection = (transform.forward * Input.GetAxis("Vertical"));
-        //  walkingVelocity = direction * speed;
-        walkingVelocity = targetDirection * speed;
-        controller.Move(walkingVelocity * Time.deltaTime);
-
-
-        if (direction != Vector3.zero)
+        if (charController.isGrounded)
         {
-            transform.forward = targetDirection;
-            Debug.Log(direction);
+            movement = transform.forward * Input.GetAxis("Vertical") + transform.right * Input.GetAxis("Horizontal");
+            movement = movement.normalized * speed;
+
+            if (Input.GetButton("Jump"))
+                movement.y = jumpSpeed;
         }
 
-        bool isGrounded = Physics.CheckSphere(feet.position, 0.1f, ground, QueryTriggerInteraction.Ignore);
+        movement.y -= gravity * Time.deltaTime;
+    }
 
-        if (isGrounded)
-            fallingVelocity.y = 0f;
-        else
-            fallingVelocity.y -= gravity * Time.deltaTime;
+    void FixedUpdate()
+    {
+        moveCharacter(movement);
+    }
 
-        if (Input.GetButtonDown("Jump") && isGrounded)
-        {
-            //audio.Play();
-            fallingVelocity.y = Mathf.Sqrt(gravity * jumpHeight);
-        }
-        controller.Move(fallingVelocity * Time.deltaTime);
+    void moveCharacter(Vector3 direction)
+    {
+        charController.Move(movement * Time.deltaTime);
     }
 }
