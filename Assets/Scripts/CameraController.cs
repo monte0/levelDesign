@@ -30,6 +30,7 @@ public class CameraController: MonoBehaviour
         currentY += Input.GetAxis("Mouse Y");
         currentY = Mathf.Clamp(currentY, Y_ANGLE_MIN, Y_ANGLE_MAX);
     }
+
     // Update is called once per frame
     void LateUpdate()
     {
